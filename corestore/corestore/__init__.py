@@ -1,4 +1,4 @@
 from flask import Flask
-app = Flask(__name__)
+import corestore.views as views
 
-import corestore.views
+app = Flask(__name__)

@@ -1,4 +1,7 @@
 from flask import Flask
-import corestore.views as views
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
+
+import corestore.views as views

@@ -1,0 +1,38 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}CoreStore{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle"
+      data-toggle="collapse" data-target=".navbar-collapse">
+        <!-- For screen reader users, tell them what the button does. -->
+        <span class="sr-only"> Toggle Navigation Menu </span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">CoreStore</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('add_warrior') }}">Submit a Warrior</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>{% block pageheader %}{% endblock %}</h1>
+  </div>
+  <div class="jumbotron">
+    {% block pagecontent %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

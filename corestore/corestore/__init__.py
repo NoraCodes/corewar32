@@ -5,3 +5,4 @@ app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
 import corestore.views as views
+import corestore.corewar as corewar

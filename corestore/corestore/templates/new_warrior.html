@@ -1,12 +1,28 @@
 {% extends "layout.html" %}
 {% block pageheader %}Submit a New Warrior{% endblock %}
 {% block pagecontent %}
-<form role="form">
-  <div class="form-group">
-    <label for="source"> Redcode source: </label>
-    <textarea id="source" class="form_control" rows=25 cols=80>
-      ; This is a textarea, for your REDCODE source.
-    </textarea>
-  </div>
+<h2>REDCODE Source Entry</h2>
+<p>Enter your source code here. It must have KOTH-standard ;name and ;author
+comment lines, and relevant ASSERT statements. These are included in the
+given template.</p>
+<form role="form" action="{{ url_for('add_warrior') }}" id="sourceform"
+method="POST">
+  <textarea name="source" form="sourceform" class="form_control"
+  style="font-family:monospace"
+  rows=25 cols=80>
+;name Imp
+;author A.K. Dewdney
+;assert CORESIZE==8000
+;assert PSPACESIZE>0
+;assert MAXCYCLES==80000
+;assert MAXPROCESSES==8000
+;assert MINDISTANCE==100
+      org   imp
+
+imp:  mov.i   imp,  imp+1
+      end
+  </textarea>
+  <br />
+  <button type="submit" class="btn btn-default">Submit</button>
 </form>
 {% endblock %}

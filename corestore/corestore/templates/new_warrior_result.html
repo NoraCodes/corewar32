@@ -1,0 +1,5 @@
+{% extends "layout.html" %}
+{% block pageheader %}Warrior Submission {%if success%}Succeeded{%else%}Failed{%endif%}{% endblock %}
+{% block pagecontent %}
+{{ message |safe }}
+{% endblock %}

@@ -9,7 +9,7 @@ def index():
 
 @app.route("/warriors/add")
 def add_warrior():
-    return "Not Implemented!", 500
+    return render_template('new_warrior.html')
 
 
 @app.route("/warriors/list")

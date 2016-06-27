@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block pageheader %}Core Warriors{% endblock %}
+{% block pagecontent %}
+<table class="table table-striped">
+<tr>
+  <th> Name </th>
+  <th> Author </th>
+</tr>
+{% for program in programs %}
+  <tr>
+    <td>{{program.name}}</td>
+    <td>{{program.author}}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}

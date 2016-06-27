@@ -6,6 +6,7 @@ bootstrap = Bootstrap(app)
 
 app.config['DEBUG'] = True
 app.config['DB_PATH'] = './database.db'
+app.secret_key = 'SECRET KEY'
 
 import corestore.views as views
 import corestore.corewar as corewar

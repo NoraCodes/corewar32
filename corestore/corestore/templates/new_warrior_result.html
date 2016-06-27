@@ -1,5 +1,17 @@
 {% extends "layout.html" %}
-{% block pageheader %}Warrior Submission {%if success%}Succeeded{%else%}Failed{%endif%}{% endblock %}
+{% block pageheader %}Warrior Validation {%if success%}Succeeded{%else%}Failed{%endif%}{% endblock %}
 {% block pagecontent %}
-{{ message |safe }}
+<h2>{{name}}</h2>
+<h3>{{author}}</h3>
+<code>
+  {{ message |safe }}
+</code>
+{% if success %}
+<form role="form" action="{{ url_for('commit_warrior') }}" method="POST">
+  <input type="hidden" name="name" value="{{name}}">
+  <input type="hidden" name="author" value="{{author}}">
+  <input type="hidden" name="source" value="{{source}}">
+  <button type="submit" class="btn btn-success"> Confirm Submission </button>
+</form>
+{% endif %}
 {% endblock %}

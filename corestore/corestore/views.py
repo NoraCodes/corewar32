@@ -18,11 +18,12 @@ def add_warrior():
         return render_template('new_warrior.html')
     # POST request means we have data, so deal with it
     elif request.method == 'POST':
-        (return_code, output, program_data) = corewar.validate(request.form.get('source', ""))
+        (return_code, output, program_data) = corewar.validate(
+            request.form.get('source', ""))
         if return_code != 0:
             return render_template('new_warrior_result.html',
-                                    success=False,
-                                    message=output.replace('\n', '<br />'))
+                                   success=False,
+                                   message=output.replace('\n', '<br />'))
         else:
             # Populate the session with all the relevant information
             session['program_name'] = program_data['name']
@@ -30,20 +31,22 @@ def add_warrior():
             session['program_source'] = program_data['source']
             session['xss'] = uuid4()
             return render_template('new_warrior_result.html',
-                                    success=True,
-                                    xss=session['xss'],
-                                    message=output.replace('\n', '<br />'))
+                                   success=True,
+                                   xss=session['xss'],
+                                   message=output.replace('\n', '<br />'))
+
 
 @app.route("/warriors/commit", methods=["POST"])
 def commit_warrior():
     # POST request will have the data we need to insert into the database
     if str(request.form.get('xss', "")) != str(session['xss']):
-        return "400 BAD REQUEST: XSS validation failed. You may be under attack."\
-        .format(request.form.get('xss'), session['xss']),400
+        return "400 BAD REQUEST: XSS validation failed." +\
+            "You may be under attack."\
+            .format(request.form.get('xss'), session['xss']), 400
 
-    warrior = { 'name': session['program_name'],
-                'author': session['program_author'],
-                'source': session['program_source']}
+    warrior = {'name': session['program_name'],
+               'author': session['program_author'],
+               'source': session['program_source']}
     if database.warrior_exists(warrior):
         return "Not Implemented"
     return str(database.add_warrior(warrior))

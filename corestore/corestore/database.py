@@ -7,6 +7,12 @@ def add_warrior(warrior):
     db = TinyDB(app.config['DB_PATH'])
     return db.insert(warrior)
 
+def get_warrior_from_data(name, author, source):
+        warrior = { 'name': name,
+                    'author': author,
+                    'source': source}
+        return warrior
+
 def list_warriors():
     db=TinyDB(app.config['DB_PATH'])
     return db.all()

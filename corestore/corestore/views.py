@@ -44,12 +44,18 @@ def commit_warrior():
             "You may be under attack."\
             .format(request.form.get('xss'), session['xss']), 400
 
-    warrior = {'name': session['program_name'],
-               'author': session['program_author'],
-               'source': session['program_source']}
-    if database.warrior_exists(warrior):
-        return "Not Implemented"
-    return str(database.add_warrior(warrior))
+    warrior = database.get_warrior_from_data(session['program_name'],
+                                             session['program_author'],
+                                             session['program_source'])
+    try:
+        database.warrior_exists(warrior)
+    except database.WarriorExistsWithThatNameException:
+        return render_template("error_name_exists.html",
+                               name=warrior['name'])
+    except database.WarriorExistsWithThatAuthorException:
+        return render_template("error_author_exists.html",
+                               author=warrior['author'])
+    return "ID" + str(database.add_warrior(warrior)), 200
 
 
 @app.route("/warriors/list")

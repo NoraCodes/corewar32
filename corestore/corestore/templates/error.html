@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block pageheader %}Core Warriors{% endblock %}
+{% block pagecontent %}
+<h2> Your submission could not be processed. </h2>
+<p> A warrior with that name ({{ name }}) already exists. Check the
+    <a href="{{ url_for(warrior_list) }}">warrior list</a> to see what warriors
+    already exist.
+</p>
+{% endblock %}

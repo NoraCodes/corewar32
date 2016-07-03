@@ -11,14 +11,49 @@ class WarriorExistsWithThatAuthorException (Exception):
     pass
 
 
+def open_warrior_database():
+    'Get an object from which warriors can be recovered.'
+    db = TinyDB(app.config['DB_PATH'])
+    table = db.table(app.config['DB_WARRIOR_TABLE'])
+    return table
+
 def add_warrior(warrior):
     'Add a warrior to the database, returning an ID'
-    db = TinyDB(app.config['DB_PATH'])
+    db = open_warrior_database()
     return db.insert(warrior)
 
 
+def get_warrior_by_id(id):
+    db = open_warrior_database()
+    return db.get(eid=id)
+
+
+def get_warrior_by_author(author):
+    db = open_warrior_database()
+    Warrior = Query()
+    return db.get(Warrior.author == author)
+
+
+def get_warrior_by_name(name):
+    db = open_warrior_database()
+    Warrior = Query()
+    return db.get(Warrior.name == name)
+
+
+def remove_warrior_by_author(author):
+    db = open_warrior_database()
+    Warrior = Query()
+    return db.remove(Warrior.author == author)
+
+
+def remove_warrior_by_name(name):
+    db = open_warrior_database()
+    Warrior = Query()
+    return db.remove(Warrior.name == name)
+
+
 def warrior_exists(warrior):
-    db = TinyDB(app.config['DB_PATH'])
+    db = open_warrior_database()
     Warrior = Query()
     if len(db.search(Warrior.name == warrior['name'])) > 0:
         raise WarriorExistsWithThatNameException
@@ -35,5 +70,5 @@ def get_warrior_from_data(name, author, source):
 
 
 def list_warriors():
-    db = TinyDB(app.config['DB_PATH'])
+    db = open_warrior_database()
     return db.all()

@@ -17,6 +17,7 @@ def open_warrior_database():
     table = db.table(app.config['DB_WARRIOR_TABLE'])
     return table
 
+
 def add_warrior(warrior):
     'Add a warrior to the database, returning an ID'
     db = open_warrior_database()
@@ -28,22 +29,10 @@ def get_warrior_by_id(id):
     return db.get(eid=id)
 
 
-def get_warrior_by_author(author):
-    db = open_warrior_database()
-    Warrior = Query()
-    return db.get(Warrior.author == author)
-
-
 def get_warrior_by_name(name):
     db = open_warrior_database()
     Warrior = Query()
     return db.get(Warrior.name == name)
-
-
-def remove_warrior_by_author(author):
-    db = open_warrior_database()
-    Warrior = Query()
-    return db.remove(Warrior.author == author)
 
 
 def remove_warrior_by_name(name):

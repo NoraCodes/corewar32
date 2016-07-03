@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block pageheader %}Warrior Validation {%if success%}Succeeded{%else%}Failed{%endif%}{% endblock %}
+{% block pagecontent %}
+<p> Your warrior is syntactically valid and passes all assertions. The
+output of pMARS is shown below.</p>
+<h2>{{name}}</h2>
+<h3>{{author}}</h3>
+<pre>
+  {{ message |safe }}
+</pre>
+{% if success %}
+<p> By pressing Submit, you confirm that this source code, and its metadata,
+is the code you wish to submit. Check your source code now to ensure that it is
+logically correct; just because it parses and asserts does NOT mean that it
+does what you want!</p>
+<p> You may only submit one Core Warrior to each tournament. </p>
+<form role="form" action="{{ url_for('commit_warrior') }}" method="POST">
+  <button type="submit" class="btn btn-success"> Submit </button>
+</form>
+{% endif %}
+{% endblock %}

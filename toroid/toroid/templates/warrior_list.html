@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block pageheader %}{{count}} Core Warriors{% endblock %}
+{% block pagecontent %}
+<table class="table table-striped">
+<tr>
+  <th> Name </th>
+  <th> Author </th>
+  {% if admin %}
+  <th> Controls </th>
+  {% endif %}
+</tr>
+{% for program in programs %}
+  <tr>
+    <td>{{program.name}}</td>
+    <td>{{program.author}}</td>
+    {% if admin %}
+    <td>
+      <form role=form id="{{program.name}}-acquire" action="url_for('acquire_warrior')"
+      method="post" style = "display: inline">
+        <input type=hidden name=action value="acquire">
+        <input type=hidden name=name value="{{program.name}}">
+        <input type=hidden name=author value="{{program.author}}">
+        <button type=submit class="btn btn-success">Retrieve</button>
+      </form>
+      <form role=form id="{{program.name}}-delete" action="url_for('delete_warrior')"
+      method="post" style = "display: inline">
+        <input type=hidden name=action value="delete">
+        <input type=hidden name=name value="{{program.name}}">
+        <input type=hidden name=author value="{{program.author}}">
+        <button type=submit class="btn btn-danger">Delete</button>
+      </form>
+    </td>
+    {% endif %}
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}

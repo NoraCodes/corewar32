@@ -1,3 +1,5 @@
+from toroid.warrior import Warrior
+
 # This is the default command line for PMARS, with the settings we've specified
 PMARS_CLI = "pmars -k -p 8000 -c 80000 -p 8000 -l 100 -d 100"
 # This addition to the command line makes PMARS run with just validation
@@ -28,29 +30,25 @@ def check_for_author(source):
 def validate(source):
     import subprocess
 
-    program_data = {'name': "",
-                    'author': "",
-                    'source': source}
+    program_data = Warrior("", "", source)
 
     # First, check if ;name, ;author, and ;assert are all present
     try:
-        name = check_for_name(source)
+        program_data.name = check_for_name(source)
     except MetadataNotFoundException:
-        return (False, "NAME metaline not found.\nYour program needs to have a" +
-                    " line that starts with ;name and includes" +
-                    " a program name.",
-                    program_data)
+        return (False, "NAME metaline not found.\nYour program needs to have" +
+                       " a line that starts with ;name and includes" +
+                       " a program name.",
+                       program_data)
     try:
-        author = check_for_author(source)
+        program_data.author = check_for_author(source)
     except MetadataNotFoundException:
-        return (False, "AUTHOR metaline not found.\nYour program needs to have" +
-                    "a line that starts with ;author and includes your name.",
-                    program_data)
+        return (False, "AUTHOR metaline not found.\nYour program needs to" +
+                       " have a line that starts with ;author and includes" +
+                       " your name.",
+                       program_data)
 
-    # If we've reached this point, the program is valid
-    program_data['name'] = name
-    program_data['author'] = author
-
+    # If we've reached this point, the metadata is valid
     # Open a PMARS process process we can communicate with
     p = subprocess.Popen((PMARS_CLI + PMARS_NO_GRAPHICS + ' -').split(),
                          stdin=subprocess.PIPE,

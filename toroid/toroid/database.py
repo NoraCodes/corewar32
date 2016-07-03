@@ -1,5 +1,6 @@
 from tinydb import TinyDB, Query
 from toroid import app, warrior
+from toroid import warrior_dict_relations as wdr
 
 
 def get_warrior_db():
@@ -9,20 +10,18 @@ def get_warrior_db():
 
 def dbwarrior_to_warrior(dbwarrior):
     ' Convert the data returned by TinyDB into a Warrior object '
-    return warrior.Warrior(
-        dbwarrior.get("name", ""),
-        dbwarrior.get("author", ""),
-        dbwarrior.get("source", "")
-    )
+    return wdr.dict_to_warrior(dbwarrior)
 
 
 def warrior_to_dbwarrior(warrior):
     ' Convert a Warrior object into data that TinyDB can store '
-    return {
-        'name': warrior.name,
-        'author': warrior.author,
-        'source': warrior.source
-    }
+    return wdr.warrior_to_dict(warrior)
+
+
+def list_warriors():
+    ' Return a list of all warriors from the database. '
+    return map(dbwarrior_to_warrior,
+               get_warrior_db().all())
 
 
 def get_warrior_by_name(name):
@@ -31,7 +30,17 @@ def get_warrior_by_name(name):
     Warrior = Query()
     try:
         return dbwarrior_to_warrior(db.search(Warrior.name == name)[0])
-    except KeyError:
+    except IndexError:
+        return False
+
+
+def get_warrior_by_author(author):
+    ' Return the warrior with the given author, or False if none exists. '
+    db = get_warrior_db()
+    Warrior = Query()
+    try:
+        return dbwarrior_to_warrior(db.search(Warrior.author == author)[0])
+    except IndexError:
         return False
 
 

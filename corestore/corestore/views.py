@@ -1,9 +1,10 @@
-from flask import request, render_template, session
+from flask import request, render_template, session, redirect, url_for
 from uuid import uuid4
 
 from corestore import app
 from corestore import corewar
 from corestore import database
+from corestore import authentication
 
 
 @app.route("/")
@@ -62,6 +63,21 @@ def commit_warrior():
 def list_warriors():
     return render_template("warrior_list.html",
                            programs=database.list_warriors())
+
+
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+    if request.method == "GET":
+        if session['auth'] is None or session['auth'] is False:
+            return render_template("login.html")
+        elif session['auth'] is True:
+            return "Not Implemented", 500
+    elif request.method == "POST":
+        if authentication.check_password(request.form.get("password", "")):
+            session['auth'] = True
+            return redirect(url_for('admin'))
+        else:
+            return render_template('error_wrong_password.html')
 
 
 @app.route("/warriors/remove")

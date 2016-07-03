@@ -32,7 +32,7 @@ def get_warrior_by_id(id):
 def get_warrior_by_name(name):
     db = open_warrior_database()
     Warrior = Query()
-    return db.get(Warrior.name == name)
+    return db.search(Warrior.name == name)[0]
 
 
 def remove_warrior_by_name(name):
@@ -52,8 +52,8 @@ def warrior_exists(warrior):
 
 
 def get_warrior_from_data(name, author, source):
-    warrior = {'name': name,
-               'author': author,
+    warrior = {'name': name.strip("\r"),
+               'author': author.strip("\r"),
                'source': source}
     return warrior
 

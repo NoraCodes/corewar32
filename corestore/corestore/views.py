@@ -59,19 +59,35 @@ def commit_warrior():
     return "ID" + str(database.add_warrior(warrior)), 200
 
 
-@app.route("/warriors/list")
+@app.route("/warriors/list", methods=["GET", "POST"])
 def list_warriors():
-    return render_template("warrior_list.html",
-                           programs=database.list_warriors())
+    if request.method == "GET":
+        return render_template("warrior_list.html",
+                               programs=database.list_warriors(),
+                               admin=session.get('auth', False))
+    if request.method == "POST":
+        # Nobody but an admin should POST to this page
+        if session.get('auth', False) is False:
+            return "You are not an administrator", 403
+        if request.form.get("action", "") == "acquire":
+            program = database.get_warrior_by_name(
+                                            request.form.get('name', ''))
+            return render_template("view_source.html",
+                                   program_name=program.get("name", ""),
+                                   program_author=program.get("author", ""),
+                                   program_source=program.get("source", "")
+                                   .replace('\n', '<br />'))
+        elif request.form.get("action", "") == "delete":
+            return "Not Implemented", 500
 
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
     if request.method == "GET":
-        if session['auth'] is None or session['auth'] is False:
+        if session.get('auth', False) is False:
             return render_template("login.html")
-        elif session['auth'] is True:
-            return "Not Implemented", 500
+        else:
+            return "Not Implemented (Authenticated)", 500
     elif request.method == "POST":
         if authentication.check_password(request.form.get("password", "")):
             session['auth'] = True

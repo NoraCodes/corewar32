@@ -1,0 +1,5 @@
+{% extends "layout.html" %}
+{% block pageheader %}Source for {{program_name}} by {{program_author}} {% endblock %}
+{% block pagecontent %}
+<p>{{program_source |safe}}</p>
+{% endblock %}

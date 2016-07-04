@@ -112,6 +112,7 @@ def admin():
         return error_page("You are not authorized to access the admin panel.",
                           403)
 
+
 @app.route('/admin/purge_db/')
 def purge_db():
     # Make sure the user is authenticated. If not, kick them out.

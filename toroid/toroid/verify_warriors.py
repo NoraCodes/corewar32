@@ -9,6 +9,7 @@ PMARS_NO_GRAPHICS = " -r 0 -v 000"
 class MetadataNotFoundException (Exception):
     pass
 
+
 def check_for_name(source):
     # Look through the source, trying to find a ;name
     for line in source.split('\n'):

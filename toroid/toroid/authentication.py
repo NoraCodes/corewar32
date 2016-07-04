@@ -12,9 +12,11 @@ def is_authenticated():
     ' Check whether or not the session is authentcated. '
     return session.get('auth', False)
 
+
 def login():
     ' Authenticate the session. '
     session['auth'] = True
+
 
 def logout():
     ' De-authenticate the session. '

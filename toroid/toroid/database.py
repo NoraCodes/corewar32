@@ -8,6 +8,11 @@ def get_warrior_db():
     return TinyDB(app.config['DB_PATH']).table(app.config['DB_WARRIOR_TABLE'])
 
 
+def purge_warrior_db():
+    ' Remove EVERYTHING from the warrior database '
+    TinyDB(app.config['DB_PATH']).purge_table(app.config['DB_WARRIOR_TABLE'])
+
+
 def dbwarrior_to_warrior(dbwarrior):
     ' Convert the data returned by TinyDB into a Warrior object '
     return wdr.dict_to_warrior(dbwarrior)

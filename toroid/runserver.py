@@ -1,3 +1,3 @@
 #!bin/python3
-from corestore import app
-app.run(debug=True)
+from toroid import app
+app.run()

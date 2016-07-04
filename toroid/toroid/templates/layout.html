@@ -29,6 +29,17 @@
 {% endblock %}
 
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flashes" style="text-align: center">
+      {% for message in messages %}
+        <div class="alert alert-info">
+          {{message}}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 <div class="container">
   <div class="page-header">
     <h1>{% block pageheader %}{% endblock %}</h1>

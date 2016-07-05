@@ -14,6 +14,7 @@ def index():
 
 @app.route('/add_warrior/')
 def add_warrior():
+    # TODO: Allow enabling and disabling submissions from the admin panel.
     return render_template('new_warrior.html')
 
 
@@ -84,7 +85,6 @@ def login():
             return redirect(url_for('admin'))
         else:
             return render_template('login.html')
-
     # If we do have form data, validate the password and take the appropriate
     #   action
     if request.method == 'POST':
@@ -155,3 +155,49 @@ def acquire_warrior():
     else:
         return error_page("You are not authorized to access the source code " +
                           "of warriors.", 403)
+
+
+@app.route('/admin/pair/')
+def pair_warriors():
+    from toroid.pairs import make_pairings
+    # Check if we're authenticated
+    if authentication.is_authenticated():
+        # Try to pair all the warriors in the db
+        (raw_pairs, raw_odd_one_out) = make_pairings(
+                                    database.list_warriors_raw())
+        # See if we got back pairings
+        if raw_pairs is False:
+            return error_page("Pairing failed. Are there warriors in the db?",
+                              500)
+        # Place results in the session
+        session['raw_pairs'] = raw_pairs
+        session['raw_odd_one_out'] = raw_odd_one_out
+        return redirect(url_for('show_pairs'))
+    else:
+        return error_page("You are not authorized to generate pairs.", 403)
+
+
+@app.route('/admin/show_pairs')
+def show_pairs():
+    if authentication.is_authenticated():
+        # Try and get data from the session
+        raw_pairs = session.get('raw_pairs', False)
+        raw_odd_one_out = session.get('raw_odd_one_out', None)
+        if raw_pairs is False or raw_odd_one_out is None:
+            return error_page("Your pair data is invalid. Regenerate.", 400)
+
+        # We have data, convert it.
+        pairs = wdr.dictpairlist_to_warriorpairlist(raw_pairs)
+        if raw_odd_one_out is not False:
+            odd_one_out = wdr.dict_to_warrior(raw_odd_one_out)
+        else:
+            odd_one_out = False
+
+        # OK! Render.
+        return render_template('pairs.html',
+                               pairs=pairs,
+                               odd_one_out=odd_one_out)
+
+    else:
+        return error_page("You're not allowed to make pairs. You can't " +
+                          "have any to view... why are you here?", 500)

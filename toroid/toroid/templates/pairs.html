@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block pageheader %}{{count}} Core Warriors{% endblock %}
+{% block pagecontent %}
+<table class="table table-striped">
+<tr>
+  <th> Program 1 </th>
+  <th> Program 2 </th>
+</tr>
+{% for pair in pairs %}
+  <tr>
+    <td>{{pair[0].name}} by {{pair[0].author}}</td>
+    <td>{{pair[1].name}} by {{pair[1].author}}</td>
+  </tr>
+{% endfor %}
+{% if odd_one_out %}
+<tr>
+  <td> {{odd_one_out.name}} by {{odd_one_out.author}} (odd one out) </td>
+  <td> N/A </td>
+</tr>
+{% endif %}
+</table>
+{% endblock %}

@@ -29,6 +29,11 @@ def list_warriors():
                get_warrior_db().all())
 
 
+def list_warriors_raw():
+    ' Return a list of all warriors from the database, as dbwarriors. '
+    return get_warrior_db().all()
+
+
 def get_warrior_by_name(name):
     ' Return the warrior with the given name, or False if none exists. '
     db = get_warrior_db()

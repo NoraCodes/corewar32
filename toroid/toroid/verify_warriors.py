@@ -6,17 +6,13 @@ PMARS_CLI = "pmars -k -p 8000 -c 80000 -p 8000 -l 100 -d 100"
 PMARS_NO_GRAPHICS = " -r 0 -v 000"
 
 
-class MetadataNotFoundException (Exception):
-    pass
-
-
 def check_for_name(source):
     # Look through the source, trying to find a ;name
     for line in source.split('\n'):
         if len(line.split()) >= 2 and line.split()[0] == ";name":
             return line.strip(";name")
     # If execution reaches this point, there is no ;name line
-    raise MetadataNotFoundException
+    return False
 
 
 def check_for_author(source):
@@ -25,7 +21,7 @@ def check_for_author(source):
         if len(line.split()) >= 2 and line.split()[0] == ";author":
             return line.strip(";author")
     # If execution reaches this point, there is not ;author line
-    raise MetadataNotFoundException
+    return False
 
 
 def validate(source):
@@ -34,16 +30,16 @@ def validate(source):
     program_data = Warrior("", "", source)
 
     # First, check if ;name, ;author, and ;assert are all present
-    try:
-        program_data.name = check_for_name(source)
-    except MetadataNotFoundException:
+
+    program_data.name = check_for_name(source)
+    if not program_data.name:
         return (False, "NAME metaline not found.\nYour program needs to have" +
                        " a line that starts with ;name and includes" +
                        " a program name.",
                        program_data)
-    try:
-        program_data.author = check_for_author(source)
-    except MetadataNotFoundException:
+
+    program_data.author = check_for_author(source)
+    if not program_data.author:
         return (False, "AUTHOR metaline not found.\nYour program needs to" +
                        " have a line that starts with ;author and includes" +
                        " your name.",

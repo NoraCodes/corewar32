@@ -1,9 +1,9 @@
 from toroid.warrior import Warrior
 
 # This is the default command line for PMARS, with the settings we've specified
-PMARS_CLI = "pmars -k -p 8000 -c 80000 -p 8000 -l 100 -d 100"
+PMARS_CLI = "./pmars -k -p 8000 -c 80000 -p 8000 -l 100 -d 100"
 # This addition to the command line makes PMARS run with just validation
-PMARS_NO_GRAPHICS = " -r 0 -v 000"
+PMARS_NO_ROUNDS = " -r 0"
 
 
 def check_for_name(source):
@@ -47,7 +47,7 @@ def validate(source):
 
     # If we've reached this point, the metadata is valid
     # Open a PMARS process process we can communicate with
-    p = subprocess.Popen((PMARS_CLI + PMARS_NO_GRAPHICS + ' -').split(),
+    p = subprocess.Popen((PMARS_CLI + PMARS_NO_ROUNDS + ' -').split(),
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT)

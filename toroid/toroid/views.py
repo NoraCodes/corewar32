@@ -4,6 +4,7 @@ from toroid import app, verify_warriors, database, authentication
 from toroid import warrior_dict_relations as wdr
 from toroid.error import error_page
 from toroid.source import filter_source
+from toroid.tournament import num_permutations
 
 
 @app.route('/')
@@ -108,8 +109,9 @@ def logout():
 def admin():
     # Make sure the user is authenticated. If not, kick them out.
     if authentication.is_authenticated():
-        return render_template('admin.html', n_warriors=len(
-            database.list_warriors_raw()))
+        return render_template('admin.html',
+                               n_warriors=len(database.list_warriors_raw()),
+                               n_permutations=num_permutations())
     else:
         return error_page("You are not authorized to access the admin panel.",
                           403)

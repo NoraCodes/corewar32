@@ -6,7 +6,8 @@ def dict_to_warrior(dictionary):
     return warrior.Warrior(
         dictionary.get("name", ""),
         dictionary.get("author", ""),
-        dictionary.get("source", "")
+        dictionary.get("source", ""),
+        dictionary.get("score", 0)
     )
 
 
@@ -15,7 +16,8 @@ def warrior_to_dict(warrior):
     return {
         'name': warrior.name,
         'author': warrior.author,
-        'source': warrior.source
+        'source': warrior.source,
+        'score': warrior.score
     }
 
 

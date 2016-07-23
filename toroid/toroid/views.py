@@ -3,7 +3,6 @@ from flask import request, render_template, session, redirect, url_for, flash
 from toroid import app, verify_warriors, database, authentication
 from toroid import warrior_dict_relations as wdr
 from toroid.error import error_page
-from toroid.success import success_page
 from toroid.source import filter_source
 
 
@@ -59,6 +58,8 @@ def verify_warrior():
 def commit_warrior():
     # Attempt to get the warrior out of the session
     warrior_dict = session.get('warrior', False)
+    # All warriors start with a score of 0
+    warrior_dict["score"] = 0
     if warrior_dict is False:
         return error_page('Request was malformed.', 400)
 
@@ -107,7 +108,8 @@ def logout():
 def admin():
     # Make sure the user is authenticated. If not, kick them out.
     if authentication.is_authenticated():
-        return render_template('admin.html')
+        return render_template('admin.html', n_warriors=len(
+            database.list_warriors_raw()))
     else:
         return error_page("You are not authorized to access the admin panel.",
                           403)

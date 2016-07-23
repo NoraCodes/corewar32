@@ -1,14 +1,51 @@
 {% extends "layout.html" %}
 {% block pageheader %}Toroid Admin Panel{% endblock %}
 {% block pagecontent %}
-<p>
-  <a href="{{url_for('logout')}}">
-    <button type=button class="btn btn-danger">Logout</button>
-  </a>
-</p>
-<p>
-  <a href="{{url_for('purge_db')}}">
-    <button type=button class="btn btn-danger">Purge Database</button>
-  </a>
-</p>
+<div class="row">
+  <div class-"col-md-4">
+    <h2>Warrior Count</h2>
+    <p>
+      {% if n_warriors == 1 %}
+        There is currently 1 warrior in the database.
+      {% else %}
+        There are currently {{n_warriors}} warriors in the database.
+      {% endif %}
+    </p>
+  </div>
+
+  <div class-"col-md-4">
+
+  </div>
+
+  <div class-"col-md-4">
+
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <h2>Log Out</h2>
+    <p>
+      This revokes the sessions's admin privelages. To use admin features, you
+      will need to log in again.
+    </p>
+    <a href="{{url_for('logout')}}">
+      <button type=button class="btn btn-danger">Logout</button>
+    </a>
+  </div>
+
+  <div class = "col-md-4">
+    <h2>Purge Database</h2>
+    <p>
+      This deletes all entries from the database. Don't click this unless you
+      want to lose EVERYTHING submitted since the database was last backed
+      up!
+    </p>
+    <a href="{{url_for('purge_db')}}">
+      <button type=button class="btn btn-danger">Purge Database</button>
+    </a>
+  </div>
+  <div class = "col-md-4">
+    SAMEPLE EXTE
+  </div>
+</div>
 {% endblock %}

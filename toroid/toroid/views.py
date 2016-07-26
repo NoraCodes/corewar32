@@ -7,11 +7,14 @@ from toroid.source import filter_source
 from toroid.tournament import num_permutations
 
 
+# This is the index page, which basically only shows text.
 @app.route('/')
 def index():
     return render_template('index.html', locked=database.is_db_locked())
 
 
+# The form for adding a warrior. This passes the data on to later validation
+# once the user has entered source code.
 @app.route('/add_warrior/')
 def add_warrior():
     # If the database is locked, people can't submit new warriors.
@@ -22,6 +25,8 @@ def add_warrior():
     return render_template('new_warrior.html')
 
 
+# Logic for checking that the warrior is valid and doesn't already exist in the
+# DB. Shows either error or confirmation pages.
 @app.route('/verify_warrior/', methods=['POST'])
 def verify_warrior():
     # Attempt to get the form data
@@ -59,6 +64,8 @@ def verify_warrior():
                            success=success)
 
 
+# The final step of the warrior submission process, this endpoint commits the
+# submitted warrior to the database.
 @app.route("/commit_warrior/", methods=['POST'])
 def commit_warrior():
     # Attempt to get the warrior out of the session
@@ -76,6 +83,8 @@ def commit_warrior():
     return(redirect(url_for('list_warriors')))
 
 
+# Displays a list of warriors to the user, with admin controls if the user is
+# an admin.
 @app.route('/list_warriors/')
 def list_warriors():
     return render_template('warrior_list.html',
@@ -83,6 +92,10 @@ def list_warriors():
                            admin=authentication.is_authenticated())
 
 
+# Display a form on GET, do login on POST
+# The form is to allow the user to enter the administrator password
+# The endpoint for login checks against the serverside config and calls
+# blesses the session with magic cow powers
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     # If we don't have form data, simply show the form or the admin page.
@@ -102,13 +115,18 @@ def login():
             return error_page('The password was incorrect.', 403)
 
 
+# This endpoint unblesses the session, removing any magic cow powers.
 @app.route('/logout/')
 def logout():
     authentication.logout()
     flash("You have been successfully logged out.")
     return redirect(url_for('index'))
 
+# All routes with a /admin/* kick the user out unceremoneously if the session
+# isn't blessed.
 
+
+# Displays a useful panel of controls for those running a tournament.
 @app.route('/admin/')
 def admin():
     # Make sure the user is authenticated. If not, kick them out.
@@ -122,6 +140,7 @@ def admin():
                           403)
 
 
+# Unlocks the database, allowing submissions.
 @app.route('/admin/unlock_db')
 def unlock_db():
     # Make sure the user is authenticated. If not, kick them out.
@@ -134,6 +153,7 @@ def unlock_db():
                           "without authentication...", 403)
 
 
+# Locks the database, preventing submissions.
 @app.route('/admin/lock_db')
 def lock_db():
     # Make sure the user is authenticated. If not, kick them out.
@@ -146,6 +166,7 @@ def lock_db():
                           "without authentication...", 403)
 
 
+# Purges all entries from the database.
 @app.route('/admin/purge_db/')
 def purge_db():
     # Make sure the user is authenticated. If not, kick them out.
@@ -158,7 +179,8 @@ def purge_db():
                           "without authentication...", 403)
 
 
-@app.route('/delete/', methods=['POST'])
+# Deletes a warrior.
+@app.route('/admin/delete/', methods=['POST'])
 def delete_warrior():
     # Try to get the form data
     name = request.form.get('name', False)
@@ -174,7 +196,8 @@ def delete_warrior():
         return error_page("You are not authorized to delete warriors.", 403)
 
 
-@app.route('/acquire/', methods=['POST'])
+# Displays the source code of a warrior.
+@app.route('/admin/acquire/', methods=['POST'])
 def acquire_warrior():
     # Try to get the form data
     name = request.form.get('name', False)
@@ -190,6 +213,8 @@ def acquire_warrior():
                           "of warriors.", 403)
 
 
+# Makes pairings and places them in the session
+# DEPRECATED
 @app.route('/admin/pair/')
 def pair_warriors():
     from toroid.pairs import make_pairings
@@ -210,6 +235,8 @@ def pair_warriors():
         return error_page("You are not authorized to generate pairs.", 403)
 
 
+# Displays pairs.
+# DEPRECATED
 @app.route('/admin/show_pairs')
 def show_pairs():
     if authentication.is_authenticated():

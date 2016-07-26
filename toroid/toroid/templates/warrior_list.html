@@ -5,6 +5,7 @@
 <tr>
   <th> Name </th>
   <th> Author </th>
+  <th>Score</th>
   {% if admin %}
   <th> Controls </th>
   {% endif %}
@@ -13,6 +14,7 @@
   <tr>
     <td>{{program.name}}</td>
     <td>{{program.author}}</td>
+    <td>{{program.score}}</td>
     {% if admin %}
     <td>
       <form role=form id="{{program.name}}-acquire" action="{{url_for('acquire_warrior')}}"

@@ -9,12 +9,16 @@ from toroid.tournament import num_permutations
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', locked=database.is_db_locked())
 
 
 @app.route('/add_warrior/')
 def add_warrior():
-    # TODO: Allow enabling and disabling submissions from the admin panel.
+    # If the database is locked, people can't submit new warriors.
+    if database.is_db_locked():
+        return error_page("The database is locked; submissions are currently \
+                          not allowed.")
+    # Otherwise, render the form. Not much else to do.
     return render_template('new_warrior.html')
 
 
@@ -111,10 +115,35 @@ def admin():
     if authentication.is_authenticated():
         return render_template('admin.html',
                                n_warriors=len(database.list_warriors_raw()),
-                               n_permutations=num_permutations())
+                               n_permutations=num_permutations(),
+                               locked=database.is_db_locked())
     else:
         return error_page("You are not authorized to access the admin panel.",
                           403)
+
+
+@app.route('/admin/unlock_db')
+def unlock_db():
+    # Make sure the user is authenticated. If not, kick them out.
+    if authentication.is_authenticated():
+        database.unlock_db()
+        flash("Unlocked the database.")
+        return redirect(url_for("admin"))
+    else:
+        return error_page("It's not nice to try and unlock the database " +
+                          "without authentication...", 403)
+
+
+@app.route('/admin/lock_db')
+def lock_db():
+    # Make sure the user is authenticated. If not, kick them out.
+    if authentication.is_authenticated():
+        database.lock_db()
+        flash("Locked the database.")
+        return redirect(url_for("admin"))
+    else:
+        return error_page("It's not nice to try and lock the database " +
+                          "without authentication...", 403)
 
 
 @app.route('/admin/purge_db/')

@@ -2,7 +2,7 @@
 {% block pageheader %}Toroid Admin Panel{% endblock %}
 {% block pagecontent %}
 <div class="row">
-  <div class-"col-md-4">
+  <div class="col-md-4">
     <h2>Warrior Count</h2>
     <p>
       {% if n_warriors == 1 %}
@@ -13,7 +13,17 @@
     </p>
   </div>
 
-  <div class-"col-md-4">
+  <div class="col-md-4">
+    <h2>Permutations</h2>
+    <p>
+      {% if n_permutations == 1 %}
+      There is only one possible permutation.
+      {% else %}
+      There are {{n_permutations}} possible permutations.
+      {% endif %}
+    </p>
+  </div>
+  <div class="col-md-4">
     <h2>Permutations</h2>
     <p>
       {% if n_permutations == 1 %}
@@ -24,6 +34,7 @@
     </p>
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-4">
     <h2>Log Out</h2>
@@ -48,7 +59,17 @@
     </a>
   </div>
   <div class = "col-md-4">
-    SAMEPLE EXTE
+    <h2>Lock/Unlock DB</h2>
+    <p>
+      When the database is locked, new submissions won't be processed. The
+      database is currently {% if locked %}locked{% else %}unlocked{% endif %}.
+    </p>
+    <a href="{{url_for('lock_db')}}">
+      <button type=button class="btn btn-danger">Lock Database</button>
+    </a>
+    <a href="{{url_for('unlock_db')}}">
+      <button type=button class="btn btn-success">Unlock Database</button>
+    </a>
   </div>
 </div>
 {% endblock %}

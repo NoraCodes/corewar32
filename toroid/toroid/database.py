@@ -1,6 +1,21 @@
 from tinydb import TinyDB, Query
-from toroid import app, warrior
+from toroid import app
 from toroid import warrior_dict_relations as wdr
+
+
+def unlock_db():
+    ' Unlock the database so new submissions will be processed. '
+    app.config['DB_LOCK'] = False
+
+
+def lock_db():
+    ' Lock the database so new submissions won\'t be processed. '
+    app.config['DB_LOCK'] = True
+
+
+def is_db_locked():
+    ' Check if the database is locked or not. '
+    return app.config.get('DB_LOCK', True)
 
 
 def get_warrior_db():

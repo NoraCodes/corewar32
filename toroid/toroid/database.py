@@ -40,8 +40,9 @@ def warrior_to_dbwarrior(warrior):
 
 def list_warriors():
     ' Return a list of all warriors from the database. '
-    return map(dbwarrior_to_warrior,
-               get_warrior_db().all())
+    warriors = [dbwarrior_to_warrior(w) for w in get_warrior_db().all()]
+    warriors.sort(key=lambda x: x.score, reverse=True)
+    return warriors
 
 
 def list_warriors_raw():
@@ -55,6 +56,16 @@ def get_warrior_by_name(name):
     Warrior = Query()
     try:
         return dbwarrior_to_warrior(db.search(Warrior.name == name)[0])
+    except IndexError:
+        return False
+
+
+def change_score_by_name(name, score):
+    ' Change the score of the warrior with the given name. '
+    db = get_warrior_db()
+    Warrior = Query()
+    try:
+        db.update({'score': score}, Warrior.name == name)
     except IndexError:
         return False
 

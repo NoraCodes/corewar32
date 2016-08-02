@@ -47,7 +47,12 @@ for pair in combinations(warriors, r=2):
     pair[0].score += w1score
     pair[1].score += w2score
 
-print("\nThe tournament is over!\n")
+# Commit the warriors back to the database
+print("\nCommitting the warriors back.")
+for warrior in warriors:
+    database.change_score_by_name(warrior.name, warrior.score)
+
+print("The tournament is over!\n")
 # The tournament has been run; sort the contestees
 
 warriors.sort(key = lambda x: x.score, reverse=True)

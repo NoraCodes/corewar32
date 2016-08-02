@@ -4,6 +4,11 @@ from toroid.warrior import Warrior
 from sys import exit, stdout
 from getpass import getpass
 from itertools import combinations
+from sys import argv
+
+PREZERO = True
+if '--no_prezero' in argv:
+    PREZERO = False
 
 # The number of rounds to run each head-to-head for.
 ROUNDS = 50
@@ -33,6 +38,10 @@ else:
 
 # Pull everything from the database.
 warriors = list(database.list_warriors())
+
+if PREZERO:
+    for warrior in warriors:
+        warrior.score = 0
 
 for pair in combinations(warriors, r=2):
     (w1score1, w2score1) = tournament.run_battle(pair[1], pair[0], rounds=int(ROUNDS/2))

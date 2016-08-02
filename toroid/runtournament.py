@@ -6,6 +6,15 @@ from getpass import getpass
 from itertools import combinations
 from sys import argv
 
+# The -h and --help flags mean "only show usage/help"
+if '-h' in argv or '--help' in argv:
+    print("TOROID SUITE: RunTournament")
+    print("This script runs a tournament on a Toroid database.")
+    print("Options:")
+    print("\t-h | --help  \tShow this help text.")
+    print("\t--no_prezero \tDon't start with a blank slate of scores.")
+    exit(0)
+
 PREZERO = True
 if '--no_prezero' in argv:
     PREZERO = False

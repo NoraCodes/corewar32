@@ -1,4 +1,5 @@
  ;name Imp
+ ; This is an ultra basic test of CORE WAR
 ;author A.K. Dewdney
 ;assert CORESIZE==8000
 ;assert PSPACESIZE>0
